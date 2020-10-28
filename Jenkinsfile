@@ -23,7 +23,7 @@ pipeline {
                 //sh 'echo $PASSWORD'
                 // or inside double quotes for string interpolation
                 //echo "username is $USERNAME"
-                }
+                //}
             }
         }
     }
