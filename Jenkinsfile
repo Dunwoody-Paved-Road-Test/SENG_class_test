@@ -16,7 +16,7 @@ pipeline {
                     remote.password = password
                     }
 
-                    sshPut remote: remote, from: '.', into: '/var/www/data/static-web/'
+                    sshPut remote: remote, from: './', into: '/var/www/data/static-web'
                 }
                 //withCredentials([usernamePassword(credentialsId: 'vagrant', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
                 // available as an env variable, but will be masked if you try to print it out any which way
