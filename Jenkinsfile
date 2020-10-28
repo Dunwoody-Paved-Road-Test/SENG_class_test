@@ -4,7 +4,7 @@ pipeline {
     stages {
         stage('copy to nginx') {
             steps {
-                node {
+                script {
                     def remote = [:]
                     remote.name = "vagrant"
                     remote.host = "192.168.56.21"
