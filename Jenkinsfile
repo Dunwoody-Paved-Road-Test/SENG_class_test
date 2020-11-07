@@ -28,8 +28,8 @@ pipeline {
                     {{#commits}}
                     {{messageTitle}}: {{authorEmailAddress}}, {{commitTime}}
                     {{/commits}}
+                    """
                 }
-}
             }
         }
     }
