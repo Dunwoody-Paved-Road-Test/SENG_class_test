@@ -29,7 +29,7 @@ pipeline {
                     {{messageTitle}}: {{authorEmailAddress}}, {{commitTime}}
                     {{/commits}}
                     """
-                echo '{$workspace}'
+                echo '${workspace}'
                 }
             }
         }
