@@ -24,10 +24,10 @@ pipeline {
             steps{
                 script{
                 def changelogString = gitChangelog returnType: 'STRING',
-                    template: """{{#commits}}
-                    {{messageTitle}}: {{authorEmailAddress}}, {{commitTime}}
-                    {{/commits}}
-                    """
+template: """{{#commits}}
+{{messageTitle}}: {{authorEmailAddress}}, {{commitTime}}
+{{/commits}}
+"""
                 writeFile file: 'ChangeLog.txt', text: changelogString
                 }
             }
