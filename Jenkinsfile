@@ -24,8 +24,7 @@ pipeline {
             steps{
                 script{
                 def changelogString = gitChangelog returnType: 'STRING',
-                    template: """
-                    {{#commits}}
+                    template: """{{#commits}}
                     {{messageTitle}}: {{authorEmailAddress}}, {{commitTime}}
                     {{/commits}}
                     """
