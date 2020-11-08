@@ -28,7 +28,7 @@ pipeline {
                 //     {{/commits}}"""
                 // writeFile file: 'ChangeLog.txt', text: changelogString
                 def changelogContext = gitChangelog returnType: 'CONTEXT'
-                print changelogContext
+                print changelogContext.dump()
                 }
             }
         }
