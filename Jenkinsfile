@@ -23,17 +23,19 @@ pipeline {
         stage('write changlog'){
             steps{
                 script{
-                def changelogString = gitChangelog returnType: 'STRING',
-                    template: """{{#commits}}{{messageTitle}},{{authorEmailAddress}},{{commitTime}}
-                    {{/commits}}"""
-                writeFile file: 'ChangeLog.txt', text: changelogString
+                // def changelogString = gitChangelog returnType: 'STRING',
+                //     template: """{{#commits}}{{messageTitle}},{{authorEmailAddress}},{{commitTime}}
+                //     {{/commits}}"""
+                // writeFile file: 'ChangeLog.txt', text: changelogString
+                def changelogContext = gitChangelog returnType: 'CONTEXT'
+                print chanelogContext
                 }
             }
         }
-        stage('email notifications'){
-            steps{
-                emailext body: 'test', recipientProviders: [requestor()], subject: 'commit', to: 'dunwoodypavedroadtest@gmail.com'
-            }
-        }
+        // stage('email notifications'){
+        //     steps{
+        //         emailext body: 'test', recipientProviders: [requestor()], subject: 'commit', to: 'dunwoodypavedroadtest@gmail.com'
+        //     }
+        // }
     }
 }
