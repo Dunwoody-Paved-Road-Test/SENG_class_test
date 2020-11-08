@@ -23,14 +23,17 @@ pipeline {
         stage('write changlog'){
             steps{
                 script{
-                // def changelogString = gitChangelog returnType: 'STRING',
-                //     template: """{{#commits}}{{messageTitle}},{{authorEmailAddress}},{{commitTime}}
-                //     {{/commits}}"""
-                // writeFile file: 'ChangeLog.txt', text: changelogString
-                def contents = readFile 'ChangeLog.txt'
-                print contents
-                def changelogContext = gitChangelog returnType: 'CONTEXT'
-                print changelogContext.commits[0].authorEmailAddress
+                    // def changelogString = gitChangelog returnType: 'STRING',
+                    //     template: """{{#commits}}{{messageTitle}},{{authorEmailAddress}},{{commitTime}}
+                    //     {{/commits}}"""
+                    // writeFile file: 'ChangeLog.txt', text: changelogString
+                    // def contents = readFile 'ChangeLog.txt'
+                    // print contents
+                    def changelogContext = gitChangelog returnType: 'CONTEXT'
+                    for (int i = 0; i < changelogContext.size(); i++) {
+                        
+                    }
+                    // print changelogContext.commits[0].authorEmailAddress
                 }
             }
         }
