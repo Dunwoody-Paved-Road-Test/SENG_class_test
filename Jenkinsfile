@@ -27,8 +27,9 @@ pipeline {
                 //     template: """{{#commits}}{{messageTitle}},{{authorEmailAddress}},{{commitTime}}
                 //     {{/commits}}"""
                 // writeFile file: 'ChangeLog.txt', text: changelogString
+                // readFile '/ChangeLog.txt'
                 def changelogContext = gitChangelog returnType: 'CONTEXT'
-                print changelogContext.dump()
+                print changelogContext.commits[0].authorEmailAddress
                 }
             }
         }
