@@ -32,7 +32,7 @@ pipeline {
         }
         stage('email notifications'){
             steps{
-                emailext body: 'test', recipientProviders: [developers()], subject: 'commit', to: 'james.d.remer@gmail.com'
+                emailext body: 'test', recipientProviders: [developers()], subject: 'commit', to: 'dunwoodypavedroadtest@gmail.com'
             }
         }
     }
