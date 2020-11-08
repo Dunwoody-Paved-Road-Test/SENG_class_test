@@ -32,7 +32,7 @@ pipeline {
                     def changelogContext = gitChangelog returnType: 'CONTEXT'
                     def timestamp = changelogContext.commits.commitTime
                     for (int i = 0; i < timestamp.size(); i++) {
-                        def time = changelogContext.commits[i].commitTime
+                        def time = timestamp[i]
                         def hourMin = time.split(':')
                         print hourMin
                     }
