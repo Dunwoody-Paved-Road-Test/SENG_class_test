@@ -20,14 +20,19 @@ pipeline {
                 }
             }
         }
-        stage('email notifications'){
+        stage('write changlog'){
             steps{
                 script{
                 def changelogString = gitChangelog returnType: 'STRING',
-                    template: """{{#commits}} {{messageTitle}}, {{authorEmailAddress}}, {{commitTime}}
+                    template: """{{#commits}}{{messageTitle}},{{authorEmailAddress}},{{commitTime}}
                     {{/commits}}"""
                 writeFile file: 'ChangeLog.txt', text: changelogString
                 }
+            }
+        }
+        stage('email notifications'){
+            steps{
+                emailext body: 'test', recipientProviders: [developers()], subject: 'commit', to: 'james.d.remer@gmail.com'
             }
         }
     }
