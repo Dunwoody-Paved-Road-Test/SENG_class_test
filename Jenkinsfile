@@ -33,8 +33,9 @@ pipeline {
                     def timestamp = changelogContext.commits.commitTime
                     for (int i = 0; i < timestamp.size(); i++) {
                         def time = timestamp[i]
+                        print time
                         def hourMin = time.split(':')
-                        print hourMin
+                        
                     }
                     // changelogContext.each {
                     //     print it.commits.commitTime
