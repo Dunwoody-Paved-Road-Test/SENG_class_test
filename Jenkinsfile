@@ -30,8 +30,8 @@ pipeline {
                     // def contents = readFile 'ChangeLog.txt'
                     // print contents
                     def changelogContext = gitChangelog returnType: 'CONTEXT'
-                    for (int i = 0; i < changelogContext.size(); i++) {
-                        
+                    changelogContext.each {
+                        print it.commits.commitTime
                     }
                     // print changelogContext.commits[0].authorEmailAddress
                 }
