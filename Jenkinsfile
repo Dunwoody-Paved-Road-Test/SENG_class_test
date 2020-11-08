@@ -31,10 +31,25 @@ pipeline {
                     // print contents
                     def changelogContext = gitChangelog returnType: 'CONTEXT'
                     def timestamp = changelogContext.commits.commitTime
+                    def emailList = changelogContext.commits.authorEmailAddress
+                    def check1
+                    def check2
                     for (int i = 0; i < timestamp.size(); i++) {
+                        check2 = check1
                         def time = timestamp[i]
-                        print time
+                        //print time
                         def hourMin = time.split(':')
+                        check1 = hourMin[0] + hourMin[1]
+                        print check1
+                        if (check1 == check2) {
+                            echo 'Match!'
+                        }
+                        if (i == 0) {
+                            echo 'first round'
+                        }
+                        else {
+                            break
+                        }
                         
                     }
                     // changelogContext.each {
