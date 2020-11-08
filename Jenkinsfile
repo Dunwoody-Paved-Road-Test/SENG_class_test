@@ -20,7 +20,7 @@ pipeline {
                 }
             }
         }
-        stage('write changlog'){
+        stage('Email Notifications'){
             steps{
                 script{
                     // def changelogString = gitChangelog returnType: 'STRING',
@@ -32,20 +32,26 @@ pipeline {
                     def changelogContext = gitChangelog returnType: 'CONTEXT'
                     def timestamp = changelogContext.commits.commitTime
                     def emailList = changelogContext.commits.authorEmailAddress
+                    def emailBody
                     def check1
                     def check2
                     for (int i = 0; i < timestamp.size(); i++) {
                         check2 = check1
                         def time = timestamp[i]
+                        def userName = emailList[i].split('@')
+                        userName = userName[0]
                         //print time
                         def hourMin = time.split(':')
                         check1 = hourMin[0] + hourMin[1]
                         print check1
                         if (check1 == check2) {
-                            echo 'Match!'
+                            emailBody = 'Your static html is now available at IP/static-web/' + userName
+                            emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: emailList[i]
                         }
                         if (i == 0) {
                             echo 'first round'
+                            emailBody = 'Your static html is now available at IP/static-web/' + userName
+                            emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: emailList[i]
                         }
                         else {
                             break
