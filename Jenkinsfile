@@ -23,10 +23,6 @@ pipeline {
         stage('Email Notifications'){
             steps{
                 script{
-                    // def changelogString = gitChangelog returnType: 'STRING',
-                    //     template: """{{#commits}}{{messageTitle}},{{authorEmailAddress}},{{commitTime}}
-                    //     {{/commits}}"""
-                    // writeFile file: 'ChangeLog.txt', text: changelogString
                     // def contents = readFile 'ChangeLog.txt'
                     // print contents
                     def changelogContext = gitChangelog returnType: 'CONTEXT'
@@ -40,35 +36,36 @@ pipeline {
                         def time = timestamp[i]
                         def userName = emailList[i].split('@')
                         userName = userName[0]
-                        //print time
                         def hourMin = time.split(':')
                         check1 = hourMin[0] + hourMin[1]
-                        print check1
+                        // if the previous timestamp has the same hour and minute
+                        // this is if Jenkins detects more than one new commit during a scan. For example, two users commit 
+                        // somehting at the same time, or within one minute of each other
                         if (check1 == check2) {
                             emailBody = 'Your static html is now available at IP/static-web/' + userName
                             emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: emailList[i]
                         }
+                        // if the first iteration of the loop
                         if (i == 0) {
-                            echo 'first round'
                             emailBody = 'Your static html is now available at IP/static-web/' + userName
                             emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: emailList[i]
                         }
                         else {
                             break
                         }
-                        
                     }
-                    // changelogContext.each {
-                    //     print it.commits.commitTime
-                    // }
-                    // print changelogContext.commits[0].authorEmailAddress
                 }
             }
         }
-        // stage('email notifications'){
-        //     steps{
-        //         emailext body: 'test', recipientProviders: [requestor()], subject: 'commit', to: 'dunwoodypavedroadtest@gmail.com'
-        //     }
-        // }
+        stage('Write Changelog'){
+            steps{
+                script{
+                    def changelogString = gitChangelog returnType: 'STRING',
+                        template: """{{#commits}}{{messageTitle}},{{authorEmailAddress}},{{commitTime}}
+                        {{/commits}}"""
+                    writeFile file: 'ChangeLog.txt', text: changelogString
+                }
+            }
+        }
     }
 }
