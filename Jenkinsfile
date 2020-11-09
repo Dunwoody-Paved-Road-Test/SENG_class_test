@@ -20,6 +20,13 @@ pipeline {
                 }
             }
         }
+        // stage('Validate HTML') {
+        //     steps{
+        //         script{
+        //             httpRequest httpMode: 'POST', requestBody: '{ [ { "contents": contents }, { "email": changelogContext.commits[i].authorEmailAddress }, ] }', responseHandle: 'NONE', url: 'url', wrapAsMultipart: false
+        //         }
+        //     }
+        // }
         stage('Email Notifications'){
             steps{
                 script{
@@ -49,6 +56,13 @@ pipeline {
                         if (i == 0) {
                             emailBody = 'Your static html is now available at IP/static-web/' + userName
                             emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: emailList[i]
+                            // validate html
+                            def htmlFiles = findFiles excludes: '', glob: userName + '/'
+                            htmlFiles.each {
+                                def html = readFile it
+                                print html
+                            }
+                            //def contents = readFile '$userName/'
                         }
                         else {
                             break
