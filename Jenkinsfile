@@ -49,19 +49,44 @@ pipeline {
                         // this is if Jenkins detects more than one new commit during a scan. For example, two users commit 
                         // somehting at the same time, or within one minute of each other
                         if (check1 == check2) {
-                            emailBody = 'Your static html is now available at IP/static-web/' + userName
+                            emailBody = 'Your static html is now available at http://98.240.222.112:49160/static-web/road-test_SENG_class_test_master/' + userName
                             emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: emailList[i]
                         }
                         // if the first iteration of the loop
                         if (i == 0) {
-                            emailBody = 'Your static html is now available at IP/static-web/' + userName
+                            // html validator goes here
+                            emailBody = 'Your static html is now available at http://98.240.222.112:49160/static-web/road-test_SENG_class_test_master/' + userName
                             emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: emailList[i]
+
                             // validate html
-                            def htmlFiles = findFiles excludes: '', glob: userName + '/'
-                            htmlFiles.each {
-                                def html = readFile it.toString()
-                                print html
-                            }
+                            // def htmlFilesList = findFiles excludes: '', glob: userName + '/'
+                            // def htmlFiles
+                            // for (int x = 0; x < htmlFilesList.size(); x++) {
+                            //     def contents = readFile htmlFilesList[x].toString()
+                            //     htmlFiles = htmlFiles + '{'
+                            // }
+                            // //def json = '{"users": [ {"userEmail":' + emailList[i] + ', "results": [ {"filename":' + 
+                            // def reqBody = """
+                            //     {​​​​​​​​
+                            //         "users": [
+                            //             {​​​​​​​​
+                            //                 "userEmail": "$emailList[i]",
+                            //                 "results": [
+                            //                     {​​​​​​​​
+                            //                         "fileName": "hate.html",
+                            //                         "results": "Error: Start tag seen without seeing a doctype first. Expected “<!DOCTYPE html>”.\nFrom line 1, column 1; to line 1, column 6\nError: Element “head” is missing a required instance of child element “title”.\nFrom line 1, column 7; to line 1, column 12\nWarning: Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.\nFrom line 1, column 1; to line 1, column 6\nThere were errors.\n"
+                            //                     }​​​​​​​​,
+                            //                     {​​​​​​​​
+                            //                         "fileName": "love.html",
+                            //                         "results": "Error: Element “head” is missing a required instance of child element “title”.\nFrom line 1, column 22; to line 1, column 27\nWarning: Consider adding a “lang” attribute to the “html” start tag to declare the language of this document.\nFrom line 1, column 16; to line 1, column 21\nThere were errors.\n"
+                            //                     }​​​​​​​​
+                            //                 ]
+                            //             }​​​​​​​​
+                            //         ]
+                            //     }​​​​​​​​
+                            // """
+                            // httpRequest acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_JSON', httpMode: 'POST', requestBody: reqBody, responseHandle: 'NONE', url: 'url', wrapAsMultipart: false
+                            
                             //def contents = readFile '$userName/'
                         }
                         else {
