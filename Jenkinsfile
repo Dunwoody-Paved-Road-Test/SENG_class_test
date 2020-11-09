@@ -59,7 +59,7 @@ pipeline {
                             // validate html
                             def htmlFiles = findFiles excludes: '', glob: userName + '/'
                             htmlFiles.each {
-                                def html = readFile it
+                                def html = readFile it.toString()
                                 print html
                             }
                             //def contents = readFile '$userName/'
