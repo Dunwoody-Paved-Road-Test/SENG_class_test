@@ -41,6 +41,20 @@ pipeline {
                     def workspace = "$WORKSPACE"
                     workspace = workspace.split('/')
                     workspace = workspace[-1]
+                    // can we see the commit files with this loop below?
+                    def changeLogSets = currentBuild.changeSets
+                    for (int i = 0; i < changeLogSets.size(); i++) {
+                        def entries = changeLogSets[i].items
+                        for (int j = 0; j < entries.length; j++) {
+                            def entry = entries[j]
+                            echo "${entry.commitId} by ${entry.author} on ${new Date(entry.timestamp)}: ${entry.msg}"
+                            def files = new ArrayList(entry.affectedFiles)
+                            for (int k = 0; k < files.size(); k++) {
+                                def file = files[k]
+                                echo "  ${file.editType.name} ${file.path}"
+                            }
+                        }
+                    }
                     // start looping through the change log context
                     for (int i = 0; i < timestamp.size(); i++) {
                         check2 = check1
@@ -53,13 +67,13 @@ pipeline {
                         // this is if Jenkins detects more than one new commit during a scan. For example, two users commit 
                         // somehting at the same time, or within one minute of each other
                         if (check1 == check2) {
-                            emailBody = 'Your static html is now available at http://98.240.222.112:49160/static-web/' + workspace + '/' + userName
+                            emailBody = 'Your static html is now available at http://98.240.222.112:49160/static-web/' + workspace + '/' + userName + '/'
                             emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: emailList[i]
                         }
                         // if the first iteration of the loop
                         if (i == 0) {
                             // html validator goes here
-                            emailBody = 'Your static html is now available at http://98.240.222.112:49160/static-web/'+ workspace + '/' + userName
+                            emailBody = 'Your static html is now available at http://98.240.222.112:49160/static-web/'+ workspace + '/' + userName + '/'
                             emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: emailList[i]
 
                             // validate html
