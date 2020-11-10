@@ -38,12 +38,12 @@ pipeline {
                     def changeLogSets = currentBuild.changeSets
                     for (int i = 0; i < changeLogSets.size(); i++) {
                         def entries = changeLogSets[i].items
-                        def emails = entries.getAddress()
-                        print emails
+                        
                         for (int j = 0; j < entries.length; j++) {
                             def entry = entries[j]
                             echo "${entry.commitId} by ${entry.author} on ${new Date(entry.timestamp)}: ${entry.msg}"
-                            
+                            def mails = entries[j].getAddress()
+                            print mails
                             //emailext body: 'emailBody', recipientProviders: [developers()], subject: 'Paved-Road Auto Notification', to: 'james.d.remer@gmail.com'
                             //def entry.author.getAddress()
                             def files = new ArrayList(entry.affectedFiles)
