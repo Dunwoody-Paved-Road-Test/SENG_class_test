@@ -42,7 +42,7 @@ pipeline {
                             def entry = entries[j]
                             echo "${entry.commitId} by ${entry.author} on ${new Date(entry.timestamp)}: ${entry.msg}"
                             emailext body: 'emailBody', recipientProviders: [developers()], subject: 'Paved-Road Auto Notification', to: emailList[i]
-                            def entry.author.getAddress()
+                            //def entry.author.getAddress()
                             def files = new ArrayList(entry.affectedFiles)
                             for (int k = 0; k < files.size(); k++) {
                                 def file = files[k]
