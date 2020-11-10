@@ -30,13 +30,6 @@ pipeline {
         stage('Email Notifications'){
             steps{
                 script{
-                    def changelogContext = gitChangelog returnType: 'CONTEXT'
-                    def timestamp = changelogContext.commits.commitTime
-                    def emailList = changelogContext.commits.authorEmailAddress
-                    def emailBody
-                    def check1
-                    def check2
-
                     // format the workspace for the url 
                     def workspace = "$WORKSPACE"
                     workspace = workspace.split('/')
@@ -55,6 +48,12 @@ pipeline {
                             }
                         }
                     }
+                    def changelogContext = gitChangelog returnType: 'CONTEXT'
+                    def timestamp = changelogContext.commits.commitTime
+                    def emailList = changelogContext.commits.authorEmailAddress
+                    def emailBody
+                    def check1
+                    def check2
                     // start looping through the change log context
                     for (int i = 0; i < timestamp.size(); i++) {
                         print check2
