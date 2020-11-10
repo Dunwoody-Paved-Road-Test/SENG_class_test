@@ -42,27 +42,30 @@ pipeline {
                     workspace = workspace.split('/')
                     workspace = workspace[-1]
                     // can we see the commit files with this loop below?
-                    // def changeLogSets = currentBuild.changeSets
-                    // for (int i = 0; i < changeLogSets.size(); i++) {
-                    //     def entries = changeLogSets[i].items
-                    //     for (int j = 0; j < entries.length; j++) {
-                    //         def entry = entries[j]
-                    //         echo "${entry.commitId} by ${entry.author} on ${new Date(entry.timestamp)}: ${entry.msg}"
-                    //         def files = new ArrayList(entry.affectedFiles)
-                    //         for (int k = 0; k < files.size(); k++) {
-                    //             def file = files[k]
-                    //             echo "  ${file.editType.name} ${file.path}"
-                    //         }
-                    //     }
-                    // }
+                    def changeLogSets = currentBuild.changeSets
+                    for (int i = 0; i < changeLogSets.size(); i++) {
+                        def entries = changeLogSets[i].items
+                        for (int j = 0; j < entries.length; j++) {
+                            def entry = entries[j]
+                            echo "${entry.commitId} by ${entry.author} on ${new Date(entry.timestamp)}: ${entry.msg}"
+                            def files = new ArrayList(entry.affectedFiles)
+                            for (int k = 0; k < files.size(); k++) {
+                                def file = files[k]
+                                echo "  ${file.editType.name} ${file.path}"
+                            }
+                        }
+                    }
                     // start looping through the change log context
                     for (int i = 0; i < timestamp.size(); i++) {
+                        print check2
                         check2 = check1
                         def time = timestamp[i]
+                        print time
                         def userName = emailList[i].split('@')
                         userName = userName[0]
                         def hourMin = time.split(':')
                         check1 = hourMin[0] + hourMin[1]
+                        print check1
                         // if the previous timestamp has the same hour and minute
                         // this is if Jenkins detects more than one new commit during a scan. For example, two users commit 
                         // somehting at the same time, or within one minute of each other
