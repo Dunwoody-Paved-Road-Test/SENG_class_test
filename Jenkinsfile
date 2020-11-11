@@ -73,6 +73,8 @@ pipeline {
                             """
                         }
                         emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: user
+                        emailBody = """Your static html is now available at:
+                        """
                     }
 
                             // validate html
