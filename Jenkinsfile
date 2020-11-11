@@ -68,7 +68,7 @@ pipeline {
                         def paths = userMap."${user}"
                         for (int b = 0; b < paths.size(); b++) {
                             def path = paths[b]
-                            emailbody = emailbody + """
+                            emailBody = emailBody + """
                             http://98.240.222.112:49160/static-web/${workspace}/${path}/
                             """
                         }
