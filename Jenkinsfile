@@ -61,9 +61,9 @@ pipeline {
                         }
                     }
                     // send mail
-                    def emailBody = """Your static html is now available at:
-                    """
                     for (int a = 0; a < userDirectories.size(); a++){
+                        def emailBody = """Your static html is now available at:
+                        """
                         // get the filepaths for the user
                         def user = userDirectories[a]
                         def paths = userMap."${user}"
@@ -73,8 +73,6 @@ pipeline {
                             """
                         }
                         emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: user
-                        emailBody = """Your static html is now available at:
-                        """
                     }
 
                             // validate html
