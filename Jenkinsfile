@@ -28,7 +28,6 @@ pipeline {
                     workspace = workspace.split('/')
                     workspace = workspace[-1]
                     // get the changed files in the current build
-                    def changedFiles = []
                     def userDirectories = []
                     def userMap = [:]
                     def changeLogSets = currentBuild.changeSets
@@ -45,68 +44,41 @@ pipeline {
                                 def filepath = "${file.path}"
                                 def userDir = filepath.split('/')
                                 userDir = userDir[0]
+                                // Map filepaths to the associated user
                                 if (userMap.containsKey(userDir)) {
                                     echo "user already exists"
                                     userMap[userDir].add(filepath)
                                     print userMap
                                 }
-                                else{
+                                else {
                                     echo "new user, adding key"
                                     userMap[userDir] = []
                                     userMap[userDir].add(filepath)
                                     print userMap
+                                    userDirectories = userDirectories + [userDir]
                                 }
-                                
-                                //def htmlFile = userDir[-1]
-                                // print userDir
-                                // print htmlFile
-                                userDirectories = userDirectories + [userDir]
                             }
                         }
                     }
                     // send mail
+                    def emailBody = """Your static html is now available at:"""
                     for (int a = 0; a < userDirectories.size(); a++){
-
+                        // get the filepaths for the user
+                        def user = userDirectories[a]
+                        def paths = userMap."${user}"
+                        for (int b = 0; b < paths.size(); b++) {
+                            def path = paths[b]
+                            emailbody = emailbody + """
+                            http://98.240.222.112:49160/static-web/${workspace}/${path}/
+                            """
+                        }
                         // filepath = filepath.split('/')
                         // def path
                         // for (int b = 0; b < filepath.size() - 1; b++) {
                         //     path = path + filepath[b] + '/'
                         // }
-                        //emailBody = """Your static html is now available at http://98.240.222.112:49160/static-web/'+ ${workspace} + '/' + ${path}"""
-                        //emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: emailList[i]
+                        emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: user
                     }
-
-
-
-                    // def changelogContext = gitChangelog returnType: 'CONTEXT'
-                    // def timestamp = changelogContext.commits.commitTime
-                    // def emailList = changelogContext.commits.authorEmailAddress
-                    // def emailBody
-                    // def check1
-                    // def check2
-                    // // start looping through the change log context
-                    // for (int i = 0; i < timestamp.size(); i++) {
-                    //     print check2
-                    //     check2 = check1
-                    //     def time = timestamp[i]
-                    //     print time
-                    //     def userName = emailList[i].split('@')
-                    //     userName = userName[0]
-                    //     def hourMin = time.split(':')
-                    //     check1 = hourMin[0] + hourMin[1]
-                    //     print check1
-                    //     // if the previous timestamp has the same hour and minute
-                    //     // this is if Jenkins detects more than one new commit during a scan. For example, two users commit 
-                    //     // somehting at the same time, or within one minute of each other
-                    //     if (check1 == check2) {
-                    //         emailBody = 'Your static html is now available at http://98.240.222.112:49160/static-web/' + workspace + '/' + userName + '/'
-                    //         emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: emailList[i]
-                    //     }
-                    //     // if the first iteration of the loop
-                    //     if (i == 0) {
-                    //         // html validator goes here
-                    //         emailBody = 'Your static html is now available at http://98.240.222.112:49160/static-web/'+ workspace + '/' + userName + '/'
-                    //         emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: emailList[i]
 
                             // validate html
                             // def htmlFilesList = findFiles excludes: '', glob: userName + '/'
