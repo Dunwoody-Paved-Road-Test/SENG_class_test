@@ -40,7 +40,7 @@ pipeline {
                                 def file = files[k]
                                 echo "File Changed: ${file.path}"
                                 def filepath = "${file.path}"
-                                def userDir = filepath.split()
+                                def userDir = filepath.split('/')
                                 userDir = userDir[0]
                                 print userDir
                             }
