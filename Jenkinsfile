@@ -29,23 +29,55 @@ pipeline {
                     workspace = workspace[-1]
                     // get the changed files in the current build
                     def changedFiles = []
+                    def userDirectories = []
+                    def userMap = [:]
                     def changeLogSets = currentBuild.changeSets
                     for (int i = 0; i < changeLogSets.size(); i++) {
                         def entries = changeLogSets[i].items
                         for (int j = 0; j < entries.length; j++) {
                             def entry = entries[j]
-                            echo "${entry.commitId} by ${entry.author} on ${new Date(entry.timestamp)}: ${entry.msg}"
+                            //echo "${entry.commitId} by ${entry.author} on ${new Date(entry.timestamp)}: ${entry.msg}"
                             def files = new ArrayList(entry.affectedFiles)
                             for (int k = 0; k < files.size(); k++) {
                                 def file = files[k]
                                 echo "File Changed: ${file.path}"
+                                // get the user's directory and the changed file
                                 def filepath = "${file.path}"
                                 def userDir = filepath.split('/')
                                 userDir = userDir[0]
-                                print userDir
+                                if (userMap.containsKey(userDir)) {
+                                    echo "user already exists"
+                                    userMap[userDir].add(filepath)
+                                    print userMap
+                                }
+                                else{
+                                    echo "new user, adding key"
+                                    userMap[userDir] = []
+                                    userMap[userDir].add(filepath)
+                                    print userMap
+                                }
+                                
+                                //def htmlFile = userDir[-1]
+                                // print userDir
+                                // print htmlFile
+                                userDirectories = userDirectories + [userDir]
                             }
                         }
                     }
+                    // send mail
+                    for (int a = 0; a < userDirectories.size(); a++){
+
+                        // filepath = filepath.split('/')
+                        // def path
+                        // for (int b = 0; b < filepath.size() - 1; b++) {
+                        //     path = path + filepath[b] + '/'
+                        // }
+                        //emailBody = """Your static html is now available at http://98.240.222.112:49160/static-web/'+ ${workspace} + '/' + ${path}"""
+                        //emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: emailList[i]
+                    }
+
+
+
                     // def changelogContext = gitChangelog returnType: 'CONTEXT'
                     // def timestamp = changelogContext.commits.commitTime
                     // def emailList = changelogContext.commits.authorEmailAddress
