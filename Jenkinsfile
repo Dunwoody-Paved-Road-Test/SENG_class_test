@@ -61,22 +61,17 @@ pipeline {
                         }
                     }
                     // send mail
-                    def emailBody = """Your static html is now available at:"""
+                    def emailBody = """Your static html is now available at:
+                    """
                     for (int a = 0; a < userDirectories.size(); a++){
                         // get the filepaths for the user
                         def user = userDirectories[a]
                         def paths = userMap."${user}"
                         for (int b = 0; b < paths.size(); b++) {
                             def path = paths[b]
-                            emailBody = emailBody + """
-                            http://98.240.222.112:49160/static-web/${workspace}/${path}/
+                            emailBody = emailBody + """http://98.240.222.112:49160/static-web/${workspace}/${path}/
                             """
                         }
-                        // filepath = filepath.split('/')
-                        // def path
-                        // for (int b = 0; b < filepath.size() - 1; b++) {
-                        //     path = path + filepath[b] + '/'
-                        // }
                         emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: user
                     }
 
