@@ -20,13 +20,6 @@ pipeline {
                 }
             }
         }
-        // stage('Validate HTML') {
-        //     steps{
-        //         script{
-        //             httpRequest httpMode: 'POST', requestBody: '{ [ { "contents": contents }, { "email": changelogContext.commits[i].authorEmailAddress }, ] }', responseHandle: 'NONE', url: 'url', wrapAsMultipart: false
-        //         }
-        //     }
-        // }
         stage('Email Notifications'){
             steps{
                 script{
@@ -34,56 +27,50 @@ pipeline {
                     def workspace = "$WORKSPACE"
                     workspace = workspace.split('/')
                     workspace = workspace[-1]
-                    // can we see the commit files with this loop below?
+                    // get the changed files in the current build
+                    def changedFiles = []
                     def changeLogSets = currentBuild.changeSets
-                    print changeLogSets
                     for (int i = 0; i < changeLogSets.size(); i++) {
                         def entries = changeLogSets[i].items
-                        print entries
                         for (int j = 0; j < entries.length; j++) {
                             def entry = entries[j]
-                            print entry
-                            echo "${entry.commitId} by ${entry.address} on ${new Date(entry.timestamp)}: ${entry.msg}"
-                            // def mails = entries[j].getAddress()
-                            // print mails
-                            //emailext body: 'emailBody', recipientProviders: [developers()], subject: 'Paved-Road Auto Notification', to: 'james.d.remer@gmail.com'
-                            //def entry.author.getAddress()
+                            echo "${entry.commitId} by ${entry.author} on ${new Date(entry.timestamp)}: ${entry.msg}"
                             def files = new ArrayList(entry.affectedFiles)
                             for (int k = 0; k < files.size(); k++) {
                                 def file = files[k]
-                                echo "  ${file.editType.name} ${file.path}"
+                                echo "File Changed: ${file.path}"
                             }
                         }
                     }
-                    def changelogContext = gitChangelog returnType: 'CONTEXT'
-                    def timestamp = changelogContext.commits.commitTime
-                    def emailList = changelogContext.commits.authorEmailAddress
-                    def emailBody
-                    def check1
-                    def check2
-                    // start looping through the change log context
-                    for (int i = 0; i < timestamp.size(); i++) {
-                        print check2
-                        check2 = check1
-                        def time = timestamp[i]
-                        print time
-                        def userName = emailList[i].split('@')
-                        userName = userName[0]
-                        def hourMin = time.split(':')
-                        check1 = hourMin[0] + hourMin[1]
-                        print check1
-                        // if the previous timestamp has the same hour and minute
-                        // this is if Jenkins detects more than one new commit during a scan. For example, two users commit 
-                        // somehting at the same time, or within one minute of each other
-                        if (check1 == check2) {
-                            emailBody = 'Your static html is now available at http://98.240.222.112:49160/static-web/' + workspace + '/' + userName + '/'
-                            emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: emailList[i]
-                        }
-                        // if the first iteration of the loop
-                        if (i == 0) {
-                            // html validator goes here
-                            emailBody = 'Your static html is now available at http://98.240.222.112:49160/static-web/'+ workspace + '/' + userName + '/'
-                            emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: emailList[i]
+                    // def changelogContext = gitChangelog returnType: 'CONTEXT'
+                    // def timestamp = changelogContext.commits.commitTime
+                    // def emailList = changelogContext.commits.authorEmailAddress
+                    // def emailBody
+                    // def check1
+                    // def check2
+                    // // start looping through the change log context
+                    // for (int i = 0; i < timestamp.size(); i++) {
+                    //     print check2
+                    //     check2 = check1
+                    //     def time = timestamp[i]
+                    //     print time
+                    //     def userName = emailList[i].split('@')
+                    //     userName = userName[0]
+                    //     def hourMin = time.split(':')
+                    //     check1 = hourMin[0] + hourMin[1]
+                    //     print check1
+                    //     // if the previous timestamp has the same hour and minute
+                    //     // this is if Jenkins detects more than one new commit during a scan. For example, two users commit 
+                    //     // somehting at the same time, or within one minute of each other
+                    //     if (check1 == check2) {
+                    //         emailBody = 'Your static html is now available at http://98.240.222.112:49160/static-web/' + workspace + '/' + userName + '/'
+                    //         emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: emailList[i]
+                    //     }
+                    //     // if the first iteration of the loop
+                    //     if (i == 0) {
+                    //         // html validator goes here
+                    //         emailBody = 'Your static html is now available at http://98.240.222.112:49160/static-web/'+ workspace + '/' + userName + '/'
+                    //         emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: emailList[i]
 
                             // validate html
                             // def htmlFilesList = findFiles excludes: '', glob: userName + '/'
@@ -115,11 +102,11 @@ pipeline {
                             // httpRequest acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_JSON', httpMode: 'POST', requestBody: reqBody, responseHandle: 'NONE', url: 'url', wrapAsMultipart: false
                             
                             //def contents = readFile '$userName/'
-                        }
-                        else {
-                            break
-                        }
-                    }
+                        // }
+                        // else {
+                        //     break
+                        // }
+                    
                 }
             }
         }
