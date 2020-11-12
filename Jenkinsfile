@@ -84,7 +84,6 @@ def sendEmails() {
     // get the changed files in the current build
     def userDirectories = []
     def userMap = [:]
-
     def changeLogSets = currentBuild.changeSets
     for (int i = 0; i < changeLogSets.size(); i++) {
         def entries = changeLogSets[i].items
@@ -100,6 +99,10 @@ def sendEmails() {
                 def userDir = filepath.split('/')
                 userDir = userDir[0]
                 // Map filepaths to the associated user
+                if (userDir == 'Jenkinsfile') {
+                    echo "skip Jenkinsfile"
+                    continue
+                }
                 if (userMap.containsKey(userDir)) {
                     echo "user already exists"
                     userMap[userDir].add(filepath)
