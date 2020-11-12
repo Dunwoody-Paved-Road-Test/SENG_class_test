@@ -114,6 +114,7 @@ def sendEmails() {
                     userMap[userDir].add(filepath)
                     print userMap
                     userDirectories = userDirectories + [userDir]
+                    print userDirectories
                 }
             }
         }
