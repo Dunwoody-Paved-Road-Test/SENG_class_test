@@ -98,7 +98,7 @@ def sendEmails() {
                 def filepath = "${file.path}"
                 def userDir = filepath.split('/')
                 userDir = userDir[0]
-                userDir.getClass()
+                print userDir.getClass()
                 // Map filepaths to the associated user
                 if (userDir == 'Jenkinsfile') {
                     echo "skip Jenkinsfile"
