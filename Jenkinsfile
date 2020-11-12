@@ -23,58 +23,62 @@ pipeline {
         stage('Email Notifications'){
             steps{
                 script{
-                    // format the workspace for the url 
-                    def workspace = "$WORKSPACE"
-                    workspace = workspace.split('/')
-                    workspace = workspace[-1]
-                    // get the changed files in the current build
-                    def userDirectories = []
-                    def userMap = [:]
                     @NonCPS
-                    def changeLogSets = currentBuild.changeSets
-                    for (int i = 0; i < changeLogSets.size(); i++) {
-                        def entries = changeLogSets[i].items
-                        for (int j = 0; j < entries.length; j++) {
-                            def entry = entries[j]
-                            //echo "${entry.commitId} by ${entry.author} on ${new Date(entry.timestamp)}: ${entry.msg}"
-                            def files = new ArrayList(entry.affectedFiles)
-                            for (int k = 0; k < files.size(); k++) {
-                                def file = files[k]
-                                echo "File Changed: ${file.path}"
-                                // get the user's directory and the changed file
-                                def filepath = "${file.path}"
-                                def userDir = filepath.split('/')
-                                userDir = userDir[0]
-                                // Map filepaths to the associated user
-                                if (userMap.containsKey(userDir)) {
-                                    echo "user already exists"
-                                    userMap[userDir].add(filepath)
-                                    print userMap
-                                }
-                                else {
-                                    echo "new user, adding key"
-                                    userMap[userDir] = []
-                                    userMap[userDir].add(filepath)
-                                    print userMap
-                                    userDirectories = userDirectories + [userDir]
+                    def sendEmails() {
+                        // format the workspace for the url 
+                        def workspace = "$WORKSPACE"
+                        workspace = workspace.split('/')
+                        workspace = workspace[-1]
+                        // get the changed files in the current build
+                        def userDirectories = []
+                        def userMap = [:]
+            
+                        def changeLogSets = currentBuild.changeSets
+                        for (int i = 0; i < changeLogSets.size(); i++) {
+                            def entries = changeLogSets[i].items
+                            for (int j = 0; j < entries.length; j++) {
+                                def entry = entries[j]
+                                //echo "${entry.commitId} by ${entry.author} on ${new Date(entry.timestamp)}: ${entry.msg}"
+                                def files = new ArrayList(entry.affectedFiles)
+                                for (int k = 0; k < files.size(); k++) {
+                                    def file = files[k]
+                                    echo "File Changed: ${file.path}"
+                                    // get the user's directory and the changed file
+                                    def filepath = "${file.path}"
+                                    def userDir = filepath.split('/')
+                                    userDir = userDir[0]
+                                    // Map filepaths to the associated user
+                                    if (userMap.containsKey(userDir)) {
+                                        echo "user already exists"
+                                        userMap[userDir].add(filepath)
+                                        print userMap
+                                    }
+                                    else {
+                                        echo "new user, adding key"
+                                        userMap[userDir] = []
+                                        userMap[userDir].add(filepath)
+                                        print userMap
+                                        userDirectories = userDirectories + [userDir]
+                                    }
                                 }
                             }
                         }
-                    }
-                    // send mail
-                    for (int a = 0; a < userDirectories.size(); a++){
-                        def emailBody = """Your static html is now available at:
-                        """
-                        // get the filepaths for the user
-                        def user = userDirectories[a]
-                        def paths = userMap."${user}"
-                        for (int b = 0; b < paths.size(); b++) {
-                            def path = paths[b]
-                            emailBody = emailBody + """http://98.240.222.112:49160/static-web/${workspace}/${path}/
+                        // send mail
+                        for (int a = 0; a < userDirectories.size(); a++){
+                            def emailBody = """Your static html is now available at:
                             """
+                            // get the filepaths for the user
+                            def user = userDirectories[a]
+                            def paths = userMap."${user}"
+                            for (int b = 0; b < paths.size(); b++) {
+                                def path = paths[b]
+                                emailBody = emailBody + """http://98.240.222.112:49160/static-web/${workspace}/${path}/
+                                """
+                            }
+                            emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: user
                         }
-                        emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: user
                     }
+                    sendEmails()
 
                             // validate html
                             // def htmlFilesList = findFiles excludes: '', glob: userName + '/'
