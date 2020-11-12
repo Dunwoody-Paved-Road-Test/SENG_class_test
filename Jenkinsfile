@@ -22,8 +22,7 @@ pipeline {
         }
         stage('Email Notifications'){
             steps{
-                script{
-                    @NonCPS
+                @NonCPS
                     def sendEmails() {
                         // format the workspace for the url 
                         def workspace = "$WORKSPACE"
@@ -78,6 +77,7 @@ pipeline {
                             emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: user
                         }
                     }
+                script{
                     sendEmails()
 
                             // validate html
