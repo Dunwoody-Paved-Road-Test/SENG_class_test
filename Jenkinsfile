@@ -129,7 +129,7 @@ def sendEmails() {
         print user
         print user.getClass()
         print userMap
-        def paths = userMap."${user}"
+        def paths = userMap[user]
         print paths
         for (int b = 0; b < paths.size(); b++) {
             def path = paths[b]
