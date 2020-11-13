@@ -75,7 +75,7 @@ pipeline {
         }
     }
 }
-@NonCPS
+
 def sendEmails() {
     // format the workspace for the url 
     def workspace = "$WORKSPACE"
