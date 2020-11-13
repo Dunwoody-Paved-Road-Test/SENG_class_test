@@ -127,6 +127,7 @@ def sendEmails() {
         // get the filepaths for the user
         def user = userDirectories[a]
         print user
+        print user.getClass()
         def paths = userMap."${user}"
         print paths
         for (int b = 0; b < paths.size(); b++) {
