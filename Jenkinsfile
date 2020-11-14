@@ -23,7 +23,26 @@ pipeline {
         stage('Email Notifications'){
             steps{
                 script{
-                    sendEmails()
+                    // format the workspace for the url 
+                    def workspace = "$WORKSPACE"
+                    workspace = workspace.split('/')
+                    workspace = workspace[-1]
+                    (userMap, userDirectories) = getCommitFiles()
+
+                    // send mail
+                    for (int a = 0; a < userDirectories.size(); a++){
+                        def emailBody = """Your static html is now available at:
+                        """
+                        // get the filepaths for the user
+                        def user = userDirectories[a]
+                        def paths = userMap[user]
+                        for (int b = 0; b < paths.size(); b++) {
+                            def path = paths[b]
+                            emailBody = emailBody + """http://98.240.222.112:49160/static-web/${workspace}/${path}/
+                            """
+                        }
+                        emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: user
+                    }
 
                             // validate html
                             // def htmlFilesList = findFiles excludes: '', glob: userName + '/'
@@ -75,12 +94,8 @@ pipeline {
         }
     }
 }
-
-def sendEmails() {
-    // format the workspace for the url 
-    def workspace = "$WORKSPACE"
-    workspace = workspace.split('/')
-    workspace = workspace[-1]
+@NonCPS
+def getCommitFiles() {
     // get the changed files in the current build
     def userDirectories = []
     def userMap = [:]
@@ -120,18 +135,5 @@ def sendEmails() {
             }
         }
     }
-    // send mail
-    for (int a = 0; a < userDirectories.size(); a++){
-        def emailBody = """Your static html is now available at:
-        """
-        // get the filepaths for the user
-        def user = userDirectories[a]
-        def paths = userMap[user]
-        for (int b = 0; b < paths.size(); b++) {
-            def path = paths[b]
-            emailBody = emailBody + """http://98.240.222.112:49160/static-web/${workspace}/${path}/
-            """
-        }
-        emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: user
-    }
+    return [userMap, userDirectories]
 }
