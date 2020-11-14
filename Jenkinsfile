@@ -45,10 +45,10 @@ pipeline {
                             def filename = path.split('/')
                             filename = filename[-1]
                             if (b == paths.size() - 1) {
-                                htmlFiles = htmlfiles + '{"filename": "${filename}", "fileData":"${fileContents}"}'
+                                htmlFiles = htmlFiles + '{"filename": "${filename}", "fileData":"${fileContents}"}'
                             }
                             else {
-                                htmlFiles = htmlfiles + '{"filename": "${filename}", "fileData":"${fileContents}"}' + ','
+                                htmlFiles = htmlFiles + '{"filename": "${filename}", "fileData":"${fileContents}"}' + ','
                             }
                             
                         }
