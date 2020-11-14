@@ -45,10 +45,10 @@ pipeline {
                             def filename = path.split('/')
                             filename = filename[-1]
                             if (b == paths.size() - 1) {
-                                htmlFiles = htmlFiles + '{"filename": "${filename}", "fileData":"${fileContents}"}'
+                                htmlFiles = htmlFiles + '{"fileName": "${filename}", "fileData":"${fileContents}"}'
                             }
                             else {
-                                htmlFiles = htmlFiles + '{"filename": "${filename}", "fileData":"${fileContents}"}' + ','
+                                htmlFiles = htmlFiles + '{"fileName": "${filename}", "fileData":"${fileContents}"}' + ','
                             }
                             
                         }
@@ -63,7 +63,7 @@ pipeline {
                             }
                             """
                         // validate html
-                        def response = httpRequest consoleLogResponseBody: true, contentType: 'APPLICATION_JSON', httpMode: 'POST', requestBody: jsonBody, url: '192.168.56.25:49160/api/validateHtmlForUsers', wrapAsMultipart: false
+                        def response = httpRequest consoleLogResponseBody: true, contentType: 'APPLICATION_JSON', httpMode: 'POST', requestBody: jsonBody, url: 'http://192.168.56.25:49160/api/validateHtmlForUsers', wrapAsMultipart: false
                         
                         emailBody = emailBody + response.content
                         emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: user
