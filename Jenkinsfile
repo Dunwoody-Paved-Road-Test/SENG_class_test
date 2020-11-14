@@ -31,15 +31,13 @@ pipeline {
 
                     // send mail
                     for (int a = 0; a < userDirectories.size(); a++){
-                        def emailBody = """Your static html is now available at:
-                        """
+                        def emailBody = """Your static html is now available at:\n"""
                         // get the filepaths for the user
                         def user = userDirectories[a]
                         def paths = userMap[user]
                         for (int b = 0; b < paths.size(); b++) {
                             def path = paths[b]
-                            emailBody = emailBody + """http://98.240.222.112:49160/static-web/${workspace}/${path}/
-                            """
+                            emailBody = emailBody + """http://98.240.222.112:49160/static-web/${workspace}/${path}/ \n"""
                         }
                         emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: user
                     }
