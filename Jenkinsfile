@@ -63,7 +63,7 @@ pipeline {
                             }
                             """
                         // validate html
-                        def response = httpRequest acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_JSON', httpMode: 'POST', requestBody: jsonBody, responseHandle: 'NONE', url: '192.168.56.25:49160/api/validateHtmlForUsers', wrapAsMultipart: false
+                        def response = httpRequest acceptType: 'APPLICATION_JSON', contentType: 'APPLICATION_JSON', httpMode: 'POST', requestBody: jsonBody, responseHandle: 'NONE', url: '192.168.56.25:49160/api/validateHtml', wrapAsMultipart: false
                         emailBody = emailBody + response.content
                         emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: user
                     }
