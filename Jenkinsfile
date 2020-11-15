@@ -75,8 +75,16 @@ pipeline {
                         def response = httpRequest consoleLogResponseBody: true, contentType: 'APPLICATION_JSON', httpMode: 'POST', requestBody: jsonBody, url: 'http://192.168.56.25:49160/api/validateHtmlForUsers', validResponseCodes: '100:500', wrapAsMultipart: false
                         def json = response.content
                         def result = readJSON text: json
+                        // format the response for the email body
+                        def results = result.users.results
+                        def validations = ""
+                        for (int c = 0; c < results.size(); c++) {
+                            validations = validations + results[a].fileName[0] + "\n"
+                            validations = validations + results[a].results[0] + "\n\n"
+                        }
 
-                        emailBody = emailBody + result.users.results
+                        emailBody = emailBody + "\nValidation Results:\n"
+                        emailBody = emailBody + validations
                         emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: user
                     }
                 }
