@@ -77,13 +77,16 @@ pipeline {
                         def result = readJSON text: json
                         // format the response for the email body
                         def results = result.users.results
+                        print results.size()
                         def validations = ""
                         for (int c = 0; c < results.size(); c++) {
                             validations = validations + results[c].fileName[0] + "\n"
+                            print results[c].fileName[0]
                             validations = validations + results[c].results[0] + "\n\n"
+                            print results[c].results[0]
                         }
 
-                        emailBody = emailBody + "\nValidation Results:\n"
+                        emailBody = emailBody + "\nValidation Results:\n\n"
                         emailBody = emailBody + validations
                         emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: user
                     }
