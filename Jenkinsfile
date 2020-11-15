@@ -81,8 +81,8 @@ pipeline {
                             // parse and add the json
                             validations = validations + result.users.results.fileName[0][c] + "\n"
                             print result.users.results.fileName[0][c]
-                            validations = validations + result.users.results.[0][c] + "\n\n"
-                            print result.users.results.[0][c]
+                            validations = validations + result.users.results[0][c] + "\n\n"
+                            print result.users.results[0][c]
                         }
                         emailBody = emailBody + "\nValidation Results:\n\n"
                         emailBody = emailBody + validations
