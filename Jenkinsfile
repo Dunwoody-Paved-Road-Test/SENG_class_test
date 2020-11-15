@@ -43,14 +43,14 @@ pipeline {
                             emailBody = emailBody + """http://98.240.222.112:49160/static-web/${workspace}/${path}/ \n"""
                         // create json request body
                             fileContents = readFile path
-                            print fileContents
+                            //print fileContents
                             // format the html for the json request body
                             def lines = fileContents.split('\n')
                             def htmlString = ""
                             for (int i = 0; i < lines.size(); i++){
                                 htmlString = htmlString + lines[i]
                             }
-                            print htmlString
+                            //print htmlString
                             def name = path.split('/')
                             name = name[-1]
                             if (b == paths.size() - 1) {
@@ -73,8 +73,10 @@ pipeline {
                             """
                         // validate html
                         def response = httpRequest consoleLogResponseBody: true, contentType: 'APPLICATION_JSON', httpMode: 'POST', requestBody: jsonBody, url: 'http://192.168.56.25:49160/api/validateHtmlForUsers', validResponseCodes: '100:500', wrapAsMultipart: false
-                        
-                        emailBody = emailBody + response.content
+                        def json = response.content
+                        def result = readJSON text: json
+
+                        emailBody = emailBody + result.users.results
                         emailext body: emailBody, subject: 'Paved-Road Auto Notification', to: user
                     }
                 }
