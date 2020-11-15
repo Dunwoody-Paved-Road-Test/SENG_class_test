@@ -79,8 +79,8 @@ pipeline {
                         def results = result.users.results
                         def validations = ""
                         for (int c = 0; c < results.size(); c++) {
-                            validations = validations + results[a].fileName[0] + "\n"
-                            validations = validations + results[a].results[0] + "\n\n"
+                            validations = validations + results[c].fileName[0] + "\n"
+                            validations = validations + results[c].results[0] + "\n\n"
                         }
 
                         emailBody = emailBody + "\nValidation Results:\n"
