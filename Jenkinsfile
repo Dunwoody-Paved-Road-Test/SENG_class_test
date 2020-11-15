@@ -44,13 +44,20 @@ pipeline {
                         // create json request body
                             fileContents = readFile path
                             print fileContents
+                            // format the html for the json request body
+                            def lines = fileContents.split('\n')
+                            def htmlString = ""
+                            for (int i = 0; i < lines.size(); i++){
+                                htmlString = htmlString + lines[i]
+                            }
+                            print htmlString
                             def name = path.split('/')
                             name = name[-1]
                             if (b == paths.size() - 1) {
-                                htmlFiles = htmlFiles + """{"fileName": "${name}", "fileData":"${fileContents}"}"""
+                                htmlFiles = htmlFiles + """{"fileName": "${name}", "fileData":"${htmlString}"}"""
                             }
                             else {
-                                htmlFiles = htmlFiles + """{"fileName": "${name}", "fileData":"${fileContents}"}""" + ""","""
+                                htmlFiles = htmlFiles + """{"fileName": "${name}", "fileData":"${htmlString}"}""" + ""","""
                             }
                             
                         }
