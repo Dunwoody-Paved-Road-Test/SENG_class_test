@@ -33,6 +33,7 @@ pipeline {
                     def htmlFiles
                     // send mail
                     for (int a = 0; a < userDirectories.size(); a++){
+                        htmlFiles = """"""
                         def emailBody = """Your static html is now available at:\n"""
                         // get the filepaths for the user
                         def user = userDirectories[a]
@@ -42,13 +43,14 @@ pipeline {
                             emailBody = emailBody + """http://98.240.222.112:49160/static-web/${workspace}/${path}/ \n"""
                         // create json request body
                             fileContents = readFile path
-                            def filename = path.split('/')
-                            filename = filename[-1]
+                            print fileContents
+                            def name = path.split('/')
+                            name = name[-1]
                             if (b == paths.size() - 1) {
-                                htmlFiles = htmlFiles + """{"fileName": "${filename}", "fileData":"${fileContents}"}"""
+                                htmlFiles = htmlFiles + """{"fileName": "${name}", "fileData":"${fileContents}"}"""
                             }
                             else {
-                                htmlFiles = htmlFiles + """{"fileName": "${filename}", "fileData":"${fileContents}"}""" + ""","""
+                                htmlFiles = htmlFiles + """{"fileName": "${name}", "fileData":"${fileContents}"}""" + ""","""
                             }
                             
                         }
