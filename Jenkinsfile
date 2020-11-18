@@ -51,7 +51,7 @@ pipeline {
                                 for (int i = 0; i < lines.size(); i++){
                                     htmlString = htmlString + lines[i]
                                 }
-                                //print htmlString
+                                print htmlString
                                 def name = path.split('/')
                                 name = name[-1]
                                 if (b == paths.size() - 1) {
@@ -67,7 +67,7 @@ pipeline {
                         def jsonBody = """
                             {
                                 "users": [
-                                    {
+                                    { "df= "" "
                                         "htmlFiles": [ ${htmlFiles} ],
                                         "userEmail": "${user}@dunwoody.edu"
                                     }
