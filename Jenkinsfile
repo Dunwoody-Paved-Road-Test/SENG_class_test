@@ -42,23 +42,26 @@ pipeline {
                             def path = paths[b]
                             emailBody = emailBody + """http://98.240.222.112:49160/static-web/${workspace}/${path} \n"""
                         // create json request body
-                            fileContents = readFile path
-                            //print fileContents
-                            // format the html for the json request body
-                            def lines = fileContents.split('\n')
-                            def htmlString = ""
-                            for (int i = 0; i < lines.size(); i++){
-                                htmlString = htmlString + lines[i]
+                            if (fileExists(path)) {
+                                fileContents = readFile path
+                                //print fileContents
+                                // format the html for the json request body
+                                def lines = fileContents.split('\n')
+                                def htmlString = ""
+                                for (int i = 0; i < lines.size(); i++){
+                                    htmlString = htmlString + lines[i]
+                                }
+                                //print htmlString
+                                def name = path.split('/')
+                                name = name[-1]
+                                if (b == paths.size() - 1) {
+                                    htmlFiles = htmlFiles + """{"fileName": "${name}", "fileData":"${htmlString}"}"""
+                                }
+                                else {
+                                    htmlFiles = htmlFiles + """{"fileName": "${name}", "fileData":"${htmlString}"}""" + ""","""
+                                }
                             }
-                            //print htmlString
-                            def name = path.split('/')
-                            name = name[-1]
-                            if (b == paths.size() - 1) {
-                                htmlFiles = htmlFiles + """{"fileName": "${name}", "fileData":"${htmlString}"}"""
-                            }
-                            else {
-                                htmlFiles = htmlFiles + """{"fileName": "${name}", "fileData":"${htmlString}"}""" + ""","""
-                            }
+                            
                             
                         }
                         def jsonBody = """
