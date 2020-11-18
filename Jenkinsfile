@@ -49,7 +49,9 @@ pipeline {
                                 def lines = fileContents.split('\n')
                                 def htmlString = ""
                                 for (int i = 0; i < lines.size(); i++){
-                                    htmlString = htmlString + lines[i]
+                                    // remove any " (double quotes)
+                                    def line = lines[i].replaceAll('"',"'")
+                                    htmlString = htmlString + line
                                 }
                                 print htmlString
                                 def name = path.split('/')
