@@ -40,9 +40,9 @@ pipeline {
                         def paths = userMap[user]
                         for (int b = 0; b < paths.size(); b++) {
                             def path = paths[b]
-                            emailBody = emailBody + """http://98.240.222.112:49160/static-web/${workspace}/${path} \n"""
                         // create json request body
                             if (fileExists(path)) {
+                                emailBody = emailBody + """http://98.240.222.112:49160/static-web/${workspace}/${path} \n"""
                                 fileContents = readFile path
                                 //print fileContents
                                 // format the html for the json request body
