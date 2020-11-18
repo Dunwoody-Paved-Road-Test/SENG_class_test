@@ -67,13 +67,14 @@ pipeline {
                         def jsonBody = """
                             {
                                 "users": [
-                                    { "df= "" "
+                                    {
                                         "htmlFiles": [ ${htmlFiles} ],
                                         "userEmail": "${user}@dunwoody.edu"
                                     }
                                 ]
                             }
                             """
+                        print jsonBody
                         // validate html
                         def response = httpRequest consoleLogResponseBody: true, contentType: 'APPLICATION_JSON', httpMode: 'POST', requestBody: jsonBody, url: 'http://192.168.56.25:49160/api/validateHtmlForUsers', validResponseCodes: '100:500', wrapAsMultipart: false
                         def json = response.content
