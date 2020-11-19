@@ -55,6 +55,7 @@ pipeline {
                                 //     htmlString = htmlString + line
                                 // }
                                 def htmlString = fileContents.replaceAll("[\\n\\r\\t]", "");
+                                htmlString = htmlString.replaceAll('"',"'")
                                 print htmlString
                                 def name = path.split('/')
                                 name = name[-1]
